@@ -46,7 +46,6 @@
   <div>
     <div>
       Minesweeper
-
       <div v-for="row, y in state" :key="y"> 
         <button v-for="item, x in row" :key="x"
          w-10 h-10 hover:bg-gray border
