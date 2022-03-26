@@ -8,4 +8,12 @@
   "files.associations": {
     "*.css": "postcss",
   },
+  "editor.formatOnSave": true, // 在保存时格式化文件
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
