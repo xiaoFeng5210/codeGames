@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { isTemplateNode } from ".pnpm/@vue+compiler-core@3.2.31/node_modules/@vue/compiler-core";
-
 interface BlockState {
   x: number;
   y: number;
@@ -33,7 +31,7 @@ function onClick(x: number, y: number) {}
 function generateMines() {
   for (const row of state) {
     for (const block of row) {
-      block.mine = Math.random() < 0.1;
+      block.mine = Math.random() < 0.2;
     }
   }
 }
@@ -77,7 +75,7 @@ function updateNumbers() {
   });
 }
 function getBlockClass(block: BlockState) {
-  return block.mine ? "text-red" : "text-gray";
+  return block.mine ? "text-red" : numberColors[block.adjacentMines!];
 }
 updateNumbers();
 </script>
@@ -95,8 +93,9 @@ updateNumbers();
           justify-center
           w-10
           h-10
-          hover:bg-gray
-          border
+          m="0.5"
+          hover="bg-gray/10"
+          border="1 gray-400/10"
           :class="getBlockClass(item)"
           @click="onClick(x, y)"
         >
