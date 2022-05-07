@@ -25,8 +25,6 @@ const state = reactive(
   )
 );
 
-generateMines();
-function onClick(x: number, y: number) {}
 // 生成炸弹
 function generateMines() {
   for (const row of state) {
@@ -35,7 +33,6 @@ function generateMines() {
     }
   }
 }
-
 const directions = [
   [1, 1],
   [1, 0],
@@ -74,9 +71,14 @@ function updateNumbers() {
     });
   });
 }
+function onClick(block: BlockState) {
+  block.revealed = true;
+}
 function getBlockClass(block: BlockState) {
+  if (!block.revealed) return "";
   return block.mine ? "text-red" : numberColors[block.adjacentMines!];
 }
+generateMines();
 updateNumbers();
 </script>
 
@@ -86,7 +88,7 @@ updateNumbers();
       Minesweeper
       <div flex="~" items-center justify-center v-for="(row, y) in state" :key="y">
         <button
-          v-for="(item, x) in row"
+          v-for="(block, x) in row"
           :key="x"
           flex="~"
           items-center
@@ -96,11 +98,11 @@ updateNumbers();
           m="0.5"
           hover="bg-gray/10"
           border="1 gray-400/10"
-          :class="getBlockClass(item)"
-          @click="onClick(x, y)"
+          :class="getBlockClass(block)"
+          @click="onClick(block)"
         >
-          <div v-if="item.mine" i-mdi:mine></div>
-          <div v-else>{{ item.adjacentMines }}</div>
+          <div v-if="block.mine" i-mdi:mine></div>
+          <div v-else>{{ block.adjacentMines }}</div>
         </button>
       </div>
     </div>
