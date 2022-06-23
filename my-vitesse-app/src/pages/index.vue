@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { workTest } from "../utils/test";
 interface BlockState {
   x: number;
   y: number;
@@ -24,15 +25,6 @@ const state = reactive(
     )
   )
 );
-
-// 生成炸弹
-function generateMines() {
-  for (const row of state) {
-    for (const block of row) {
-      block.mine = Math.random() < 0.2;
-    }
-  }
-}
 const directions = [
   [1, 1],
   [1, 0],
@@ -53,33 +45,60 @@ const numberColors = [
   "text-purple-500",
   "text-pink-500",
 ];
+function getSiblings(block: BlockState) {
+  return directions
+    .map(([dx, dy]) => {
+      const x2 = block.x + dx;
+      const y2 = block.y + dy;
+      // 边界就不考虑了
+      if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT) return undefined;
+      return state[y2][x2];
+    })
+    .filter(Boolean) as BlockState[];
+}
 // 更新格子的显示
 function updateNumbers() {
   state.forEach((row, y) => {
     row.forEach((block: BlockState, x) => {
       if (block.mine) return;
       block.adjacentMines = 0;
-      directions.forEach(([dx, dy]) => {
-        const x2 = x + dx;
-        const y2 = y + dy;
-        // 边界就不考虑了
-        if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT) return;
-        if (state[y2][x2].mine) {
-          block.adjacentMines! += 1;
+      getSiblings(block).forEach((v) => {
+        if (v?.mine) {
+          block.adjacentMines += 1;
         }
       });
     });
   });
 }
+// 生成炸弹
+function generateMines(initial: BlockState) {
+  for (const row of state) {
+    for (const block of row) {
+      if (Math.abs(initial.x - block.x) < 1) continue;
+      if (Math.abs(initial.y - block.y) < 1) continue;
+      block.mine = Math.random() < 0.2;
+    }
+  }
+  updateNumbers();
+}
+
+function expandZero(block: BlockState) {
+  if (block.adjacentMines) return;
+}
+let mineGenerated = false;
 function onClick(block: BlockState) {
+  if (!mineGenerated) {
+    generateMines(block);
+    mineGenerated = true;
+  }
   block.revealed = true;
 }
 function getBlockClass(block: BlockState) {
-  if (!block.revealed) return "";
+  if (!block.revealed) return "bg-gray-500/10";
   return block.mine ? "text-red" : numberColors[block.adjacentMines!];
 }
-generateMines();
-updateNumbers();
+
+workTest();
 </script>
 
 <template>
@@ -101,8 +120,12 @@ updateNumbers();
           :class="getBlockClass(block)"
           @click="onClick(block)"
         >
-          <div v-if="block.mine" i-mdi:mine></div>
-          <div v-else>{{ block.adjacentMines }}</div>
+          <template v-if="block.revealed">
+            <div>
+              <div v-if="block.mine" i-mdi:mine></div>
+              <div v-else>{{ block.adjacentMines }}</div>
+            </div>
+          </template>
         </button>
       </div>
     </div>

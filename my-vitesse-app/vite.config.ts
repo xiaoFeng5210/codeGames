@@ -7,8 +7,10 @@ import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
+import commonjs from 'vite-plugin-commonjs';
 
 export default defineConfig({
+  mode: 'production',
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
@@ -18,7 +20,7 @@ export default defineConfig({
     Vue({
       reactivityTransform: true,
     }),
-
+    commonjs(),
     // https://github.com/hannoeru/vite-plugin-pages
     Pages(),
 
@@ -46,5 +48,5 @@ export default defineConfig({
   // https://github.com/vitest-dev/vitest
   test: {
     environment: 'jsdom',
-  },
+  }
 })
