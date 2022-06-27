@@ -39,15 +39,15 @@ function step(b: Branch) {
   if (Math.random() < 0.5) {
     pendingTasks.push(() => step({
       start: end,
-      length: 100,
-      theta: b.theta - 0.4 * Math.random(),
+      length: b.length + Math.random() * 10 - 5,
+      theta: b.theta - 0.3 * Math.random(),
     }))
   }
   if (Math.random() < 0.5) {
     pendingTasks.push(() => step({
       start: end,
-      length: 100,
-      theta: b.theta + 0.4 * Math.random(),
+      length: b.length + Math.random() * 10 - 5,
+      theta: b.theta + 0.3 * Math.random(),
     }))
   }
 }
