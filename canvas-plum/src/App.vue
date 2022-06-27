@@ -31,28 +31,32 @@ function drawBranch(b: Branch) {
   lineTo(b.start, getEndPoint(b))
 }
 
+function step(b: Branch) {
+  const end = getEndPoint(b)
+  drawBranch(b)
+  if (Math.random() < 0.5) {
+    step({
+      start: end,
+      length: 100,
+      theta: b.theta - 0.2,
+    })
+  }
+  if (Math.random() < 0.5) {
+    step({
+      start: end,
+      length: 100,
+      theta: b.theta + 0.2,
+    })
+  }
+}
+
 function init() {
   ctx.strokeStyle = 'white'
-  const branch = {
+  step({
     start: { x: WIDTH / 2, y: HEIGHT },
     length: 100,
     theta: -Math.PI / 2,
-  }
-  const end = getEndPoint(branch)
-  drawBranch(branch)
-  const leftBranch = {
-    // 终点的位置就是下一条线的启始位置
-    start: end,
-    length: 100,
-    theta: branch.theta - 0.1,
-  }
-  drawBranch(leftBranch)
-  const rightBranch = {
-    start: end,
-    length: 100,
-    theta: branch.theta + 0.1,
-  }
-  drawBranch(rightBranch)
+  })
 }
 
 onMounted(() => {
