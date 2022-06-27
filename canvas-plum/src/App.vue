@@ -31,24 +31,41 @@ function drawBranch(b: Branch) {
   lineTo(b.start, getEndPoint(b))
 }
 
+const pendingTasks: Function[] = []
+
 function step(b: Branch) {
   const end = getEndPoint(b)
   drawBranch(b)
   if (Math.random() < 0.5) {
-    step({
+    pendingTasks.push(() => step({
       start: end,
       length: 100,
-      theta: b.theta - 0.2,
-    })
+      theta: b.theta - 0.4 * Math.random(),
+    }))
   }
   if (Math.random() < 0.5) {
-    step({
+    pendingTasks.push(() => step({
       start: end,
       length: 100,
-      theta: b.theta + 0.2,
-    })
+      theta: b.theta + 0.4 * Math.random(),
+    }))
   }
 }
+let framesCount = 0
+function frame() {
+  const tasks = [...pendingTasks]
+  pendingTasks.length = 0
+  tasks.forEach(fn => fn())
+}
+function animationFrame() {
+  requestAnimationFrame(() => {
+    framesCount += 1
+    if (framesCount % 4 === 0) frame()
+    animationFrame()
+  })
+}
+
+animationFrame()
 
 function init() {
   ctx.strokeStyle = 'white'
