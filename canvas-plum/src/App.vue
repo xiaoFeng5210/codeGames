@@ -8,7 +8,7 @@ interface Point {
   x: number
   y: number
 }
-interface Line {
+interface Branch {
   start: Point
   length: number
   theta: number
@@ -20,18 +20,39 @@ function lineTo(p1: Point, p2: Point) {
   ctx.stroke()
 }
 
-function line(l: Line) {
-  const { start, length, theta } = l
-  const end = { x: start.x + length * Math.cos(theta), y: start.y + length * Math.sin(theta) }
-  lineTo(start, end)
+function getEndPoint(b: Branch) {
+  return {
+    x: b.start.x + b.length * Math.cos(b.theta),
+    y: b.start.y + b.length * Math.sin(b.theta),
+  }
+}
+
+function drawBranch(b: Branch) {
+  lineTo(b.start, getEndPoint(b))
 }
 
 function init() {
   ctx.strokeStyle = 'white'
-  const startPoint = { x: WIDTH / 2, y: HEIGHT }
-  const endPoint = { x: WIDTH / 2, y: HEIGHT / 2 }
-  lineTo(startPoint, endPoint)
-  lineTo(endPoint, { x: WIDTH / 2 + 50, y: 10 })
+  const branch = {
+    start: { x: WIDTH / 2, y: HEIGHT },
+    length: 100,
+    theta: -Math.PI / 2,
+  }
+  const end = getEndPoint(branch)
+  drawBranch(branch)
+  const leftBranch = {
+    // 终点的位置就是下一条线的启始位置
+    start: end,
+    length: 100,
+    theta: branch.theta - 0.1,
+  }
+  drawBranch(leftBranch)
+  const rightBranch = {
+    start: end,
+    length: 100,
+    theta: branch.theta + 0.1,
+  }
+  drawBranch(rightBranch)
 }
 
 onMounted(() => {
