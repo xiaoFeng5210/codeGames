@@ -33,22 +33,22 @@ function drawBranch(b: Branch) {
 
 const pendingTasks: Function[] = []
 
-function step(b: Branch) {
+function step(b: Branch, depth = 0) {
   const end = getEndPoint(b)
   drawBranch(b)
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.5 || depth < 2) {
     pendingTasks.push(() => step({
       start: end,
-      length: b.length + Math.random() * 10 - 5,
+      length: b.length + (Math.random() * 10 - 5),
       theta: b.theta - 0.3 * Math.random(),
-    }))
+    }, depth + 1))
   }
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.5 || depth < 2) {
     pendingTasks.push(() => step({
       start: end,
-      length: b.length + Math.random() * 10 - 5,
+      length: b.length + (Math.random() * 10 - 5),
       theta: b.theta + 0.3 * Math.random(),
-    }))
+    }, depth + 1))
   }
 }
 let framesCount = 0
@@ -60,7 +60,7 @@ function frame() {
 function animationFrame() {
   requestAnimationFrame(() => {
     framesCount += 1
-    if (framesCount % 4 === 0) frame()
+    if (framesCount % 3 === 0) frame()
     animationFrame()
   })
 }
