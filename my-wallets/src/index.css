@@ -43,6 +43,32 @@ body {
     display: inline-block;
 }
 
+.container-body {
+    font-family: "Gilroy", sans-serif;
+    display: flex;
+    font-weight: normal;
+    gap: 1rem
+}
+
+.one-unit {
+    cursor: pointer;
+    border: 1px solid lightgray;
+    height: 16rem;
+    width: 6rem;
+    border-radius: 100rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+    background-color: white;
+    transition: all .2s ease-in-out;
+}
+
+.currency {
+    /* 设置文字间距 */
+    letter-spacing: 1px;;
+}
 
 
 
