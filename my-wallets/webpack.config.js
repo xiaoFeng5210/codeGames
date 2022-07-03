@@ -16,17 +16,17 @@ module.exports = {
         port: 9000,
     },
     module: {
-        // rules: [
-        //     {
-        //         test: /\.[jt]s?$/,
-        //         exclude: /node_modules/,
-        //         use: {
-        //             loader: 'babel-loader',
-        //             options: {
-        //                 presets: ['@babel/preset-typescript', '@babel/preset-env']
-        //             }
-        //         }
-        //     }
-        // ]
+        rules: [
+            {
+                test: /\.[jt]s?$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-typescript', '@babel/preset-env']
+                    }
+                }
+            }
+        ]
     }
 }
