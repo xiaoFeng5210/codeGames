@@ -67,7 +67,22 @@ body {
 
 .currency {
     /* 设置文字间距 */
-    letter-spacing: 1px;;
+    letter-spacing: 1px;
+    font-size: .8rem;
+    font-weight: bold;
+    transform: rotate(-90deg)
+}
+
+.one-unit:hover {
+    background-color: rgb(250, 249, 249);
+}
+
+.num {
+    font-size: 1.8rem;
+}
+
+.symbol {
+    font-size: 0.7rem;
 }
 
 
