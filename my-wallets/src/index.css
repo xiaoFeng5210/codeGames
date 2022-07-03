@@ -85,6 +85,28 @@ body {
     font-size: 0.7rem;
 }
 
+.add-text {
+    transform: translatey(1.5rem) rotate(-90deg);
+    font-size: 0.9rem;
+}
+
+.add-hint {
+    opacity: 0.4;
+}
+
+.add-unit {
+    border-style: dashed;
+    cursor: pointer;
+}
+
+.selected-unit {
+    background-color: #4f46ba;
+    color: white;
+    border: 1px solid #4f46ba;
+    box-shadow: 2px 2px 4px rgba(12, 20, 136, 0.36), -2px -2px 8px rgba(27, 73, 119, 0.27);
+    z-index: 0
+}
+
 
 
 
