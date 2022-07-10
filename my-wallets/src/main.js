@@ -81,25 +81,103 @@ document.body.addEventListener('mousemove', (e) => {
     wallet.style.transform = `translate(${disX}px, ${disY}px)`
 })
 
-
+/**
+ * 单元拖拽
+ */
+let blockMoving = false;
+const startedBlockPos = {
+    x: 0,
+    y: 0
+}
+let blockDisX = 0;
+let blockDisY = 0;
 
 // 目标单元的信息保存
 let target = null
 let targetIndex = 0
 let blockWidth = 0
-// TODO:
+let gapWidth = 16
+
+let currentPosIndex = 0;
+let moveStep = 0;
+let isDrag = false;
+
 function handleMouseDown(e) {
     if (e.currentTarget.classList.contains("add-unit")) {
         return 
     }
-    clickTImeId = setTimeout(() => {
+    clickTimeId = setTimeout(() => {
         clickable = false;
     }, 200)
     const allUnits = [...document.querySelectorAll(`.one-unit`)]
     allUnits.forEach((item, index) => {
         if (item === e.currentTarget) {
-            target = item
+            currentTarget = index
             targetIndex = index
         }
     })
+    blockMoving = true
+    startedBlockPos.x = e.clientX
+    startedBlockPos.y = e.clientY
+
+    target = e.currentTarget
+    target.style.transition = 'none'
+    target.style.zIndex = 10
+
+    blockWidth = target.getBoundingClientRect().width
 }
+
+function handleMouseUp(e) {
+    if (e.currentTarget.classList.contains("add-unit")) {
+        return 
+    }
+    clearTimeout(clickTimeId)
+    clickable = true;
+    blockMoving = false
+
+    const allUnits = [...document.querySelectorAll(`.one-unit`)]
+    if (moveStep < 0 - targetIndex) {
+        moveStep = -targetIndex
+    } else if (moveStep > allUnits.length - targetIndex - 2) {
+        moveStep = allUnits.length - targetIndex - 2
+    }
+
+    target.style.transition = "all 0.2s ease-in-out"
+    target.style.zIndex = 0
+    target.style.transform = `translateX(${moveStep * (blockWidth + gapWidth)}px)`
+    // TODO:
+}
+
+/**
+ * 目标单元移动
+ * @param allUnits 所有单元节点
+ * @param targetIndex 目标索引
+ * @param disX 目标x轴位移
+ * @param moveWidth 目标单元宽度 + 单元间距
+ */
+function changePos(allUnits, targetIndex, disX, moveWidth) {
+    moveStep = parseInt(disX / moveWidth)
+    currentPosIndex = targetIndex + moveStep
+    for (let i = 0; i < allUnits.length; i++) {
+        if (i !== targetIndex) {
+            allUnits[i].style.transform = "translateX(0px)"
+        }
+    }
+    
+}
+
+allUnitsArr.forEach(item => {
+    item.addEventListener("mousedown", handleMouseDown)
+})
+
+document.body.addEventListener("mousemove", (e) => {
+  if (blockMoving) {
+    blockDisX = e.clientX - startedBlockPos.x
+    blockDisY = e.clientY - startedBlockPos.y
+    isDrag = true
+    target.style.transform = `translate(${blockDisX}px, ${blockDisY}px)`
+
+    //TODO: changePos
+
+  }
+})
