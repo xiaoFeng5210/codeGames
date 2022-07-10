@@ -50,8 +50,36 @@ function handleClick(event) {
 }
 
 // 容器移动
-
-
+const wallet = document.querySelector('.container')
+const moveBar = document.querySelector('.moveBar')
+let isStarted = false
+const startedPos = {
+    x: 0,
+    y: 0
+}
+const baseDis = {
+    x: 0,
+    y: 0
+}
+let disX = 0;
+let disY = 0;
+moveBar.addEventListener('mousedown', (e) => {
+    isStarted = true
+    startedPos.x = e.clientX
+    startedPos.y = e.clientY
+})
+moveBar.addEventListener('mouseup', (e) => {
+    isStarted = false
+    baseDis.x = disX
+    baseDis.y = disY
+})
+document.body.addEventListener('mousemove', (e) => {
+    if (isStarted) {
+        disX = baseDis.x + e.clientX - startedPos.x
+        disY = baseDis.y + e.clientY - startedPos.y
+    }
+    wallet.style.transform = `translate(${disX}px, ${disY}px)`
+})
 
 
 
